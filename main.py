@@ -20,7 +20,7 @@ async def root():
     return {'message': 'Hello Fast!!'}
 
 
-@app.post('/createpost')
+@app.post('/posts')
 def create_post(post: Post):
     return {
         'post_status': 'Updated successfully',
@@ -36,7 +36,7 @@ def create_post(post: Post):
 The above and below methods have the same route,
 but the first one will be consired
 '''
-@app.post('/createpost')
+@app.post('/posts')
 def create_post(data: dict = Body()):       #---> Extract data from the body and stores it as dictionary
     return {'new_post_statue': 'Post updated Successfully',
             'post_title': data['title'],
