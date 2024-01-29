@@ -20,8 +20,9 @@ async def root():
     return {'message': 'Hello Fast!!'}
 
 
-@app.post('/posts')
+@app.post('/createposts')
 def create_post(post: Post):
+    print(post)
     return {
         'post_status': 'Updated successfully',
         'post_validation': 'Schema is validated successfully',
