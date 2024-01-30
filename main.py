@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.params import Body     #--> To perform activities like extraction from the body
 from pydantic import BaseModel
 from typing import Optional
+import random
 #instance of FastAPI - app of Fastapi
 app = FastAPI()
 
@@ -11,11 +12,6 @@ app = FastAPI()
 class Post(BaseModel):
     title: str
     content: str
-    rating: Optional[int] = None   # Optional Validation
-    published: bool = True         # Default Validatio
-
-
-
 
 #------------------------------------------>< Stored posts list ><------------------------------------------#
 
@@ -31,25 +27,26 @@ my_post = [{
     "post_id": 3}]
 
 #------------------------------------------>< Various route functions ><------------------------------------------#
+#Route to create post using body
+@app.post('/createposts')
+def create_post(post: Post):
+    post_dict = post.model_dump()  #Used to generate dictionary from the model
+    post_dict['post_id'] = random.randint(1,1000000)
+    print(post_dict)
+    my_post.append(post_dict)         #Appending to the list
+    #print(my_post)
+    return {
+        'post_status': 'Updated successfully',
+        'post_validation': 'Schema is validated successfully',
+        'post_title': post.title,
+        'post_content': post.content
+    }
+
 #Routing to '/' endpoint
 @app.get('/')
 async def root():
     return {'message': 'List of Posts',
             'data': my_post}
-
-#Route to create post using body
-@app.post('/createposts')
-def create_post(post: Post):
-    print(post)
-    return {
-        'post_status': 'Updated successfully',
-        'post_validation': 'Schema is validated successfully',
-        'post_title': post.title,
-        'post_content': post.content,
-        'post_rating': post.rating,
-        'post_publish_status': post.published
-
-    }
 
 '''
 The above and below methods have the same route,
